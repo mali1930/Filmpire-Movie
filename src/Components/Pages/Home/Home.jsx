@@ -6,7 +6,7 @@ import MoviesCard from "../../MoviesCard";
 import HomeSection from "../../HomeSection";
 import Pagination from "../../Pagination";
 import { setPage } from "../../../app/features/currentGenreOrCategory";
-const Home = ({ movie }) => {
+const Home = () => {
   const { page, genreOrCategoryName, searchQuery } = useSelector(
     (s) => s.currentGenreOrCategory
   );
@@ -16,7 +16,7 @@ const Home = ({ movie }) => {
     page,
     searchQuery,
   });
-  console.log(data);
+
   const changePage = (page) => {
     dispatch(setPage(page));
   };
@@ -26,8 +26,9 @@ const Home = ({ movie }) => {
   return (
     <>
       <div className="flex mt-10 md:flex-row   items-center flex-wrap justify-center gap-10">
-        <HomeSection movie={movie} />
-        {data?.results?.map((movie) => (
+        <HomeSection movie={data?.results?.[0]} />
+
+        {data?.results?.slice(1).map((movie) => (
           <div key={movie.id}>
             <MoviesCard movie={movie} />
           </div>

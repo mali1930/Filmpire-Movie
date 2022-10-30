@@ -7,6 +7,7 @@ import Sidebar from "./Components/Sidebar";
 import Home from "./Components/Pages/Home/Home";
 import ActorDetail from "./Components/Pages/ActorDetail/ActorDetail";
 import MovieDetail from "./Components/Pages/MovieDetail/MovieDetail";
+import Profile from "./Components/Pages/Profile/Profile";
 const App = () => {
   const [toggleSideBar, setToggleSideBar] = useState(false);
   const { theme } = useSelector((s) => s.theme);
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/movie/:id" element=<MovieDetail /> />
             <Route path="/actor/:id" element=<ActorDetail /> />
+            <Route path="/profile/id" element=<Profile /> />
           </Routes>
         </div>
       </div>

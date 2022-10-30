@@ -10,7 +10,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useGetMovieQuery } from "../../../Services/TMDB";
 import { Link, useParams } from "react-router-dom";
 import { selectGenreOrCategory } from "../../../app/features/currentGenreOrCategory";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import genreIcons from "../../assets/genres";
 import Loader from "../../Loader";
@@ -21,7 +21,7 @@ import Modal from "../../Modal";
 const MovieDetail = () => {
   // const { user } = useSelector();
   const home = useNavigate();
-  const actor = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [modal, toggleModal] = useState(false);
 
@@ -112,13 +112,13 @@ const MovieDetail = () => {
           </div>
           <div>
             <h1 className="font-bold text-lg mb-2">Top Cast</h1>
-            <div
-              onClick={() => actor("/actor/id")}
-              className="flex cursor-pointer flex-wrap gap-2 md:justify-start justify-center items-center  "
-            >
+            <div className="flex cursor-pointer flex-wrap gap-2 md:justify-start justify-center items-center  ">
               {movie &&
                 movie.credits?.cast?.slice(0, 6).map((character, i) => (
-                  <div to={`/actors/${character.id}`} key={i}>
+                  <div
+                    onClick={() => navigate(`/actor/${character.id}`)}
+                    key={i}
+                  >
                     {character.profile_path && (
                       <img
                         className=" w-[80px] rounded-lg "
@@ -205,7 +205,7 @@ const MovieDetail = () => {
           </div>
           <Modal
             toggle={toggleModal}
-            videoKey={movie.videos.results?.[0].key}
+            //videoKey={movie.videos.results?.[0].key}
             isOpen={modal}
           />
         </div>

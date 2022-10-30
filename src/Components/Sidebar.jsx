@@ -53,7 +53,6 @@ const Sidebar = ({ toggleSideBar, setToggleSideBar }) => {
             className=" dark:text-white  flex items-center gap-3 text-left py-2 px-3 w-full hover:bg-gray-300 dark:hover:bg-gray-600"
             key={category.id}
           >
-            
             {category.title}
           </button>
         ))}
@@ -85,7 +84,7 @@ const Sidebar = ({ toggleSideBar, setToggleSideBar }) => {
       <div
         onClick={() => setToggleSideBar(false)}
         className={
-          "fixed transition-all md:hidden inset-0 bg-black/30 z-10" +
+          "fixed transition-all md:hidden inset-0 backdrop-blur-sm bg-black/40 z-10" +
           (toggleSideBar ? " block" : " hidden")
         }
       />
