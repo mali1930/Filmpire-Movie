@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Loader from "../../Loader";
 import { useGetMoviesByActorIdQuery } from "../../../Services/TMDB";
@@ -13,6 +13,7 @@ const ActorDetail = () => {
   const { id } = useParams();
   const { data, isFetching, isError } = useGetActorsDetailsQuery(id);
   const { data: movies } = useGetMoviesByActorIdQuery({ id, page });
+  const [showMore, setShowMore] = useState(false);
 
   if (isFetching) {
     return <Loader />;
@@ -36,10 +37,22 @@ const ActorDetail = () => {
           <p className=" text-lg">
             Born: {new Date(data?.birthday).toDateString()}
           </p>
-          <p className="text-sm leading-6 text-gray-500 dark:text-gray-100">
-            {data?.biography || "sorry, no biography yet..."}
-          </p>
-          <div className="mt-3">
+          <div className="relative mb-3">
+            <p
+              className={`text-sm relative leading-6
+             text-gray-500 dark:text-gray-100 ${!showMore && "line-clamp-2"}`}
+            >
+              {data?.biography || "sorry, no biography yet..."}
+            </p>
+            <button
+              onClick={() => setShowMore(!showMore)}
+              className="absolute text-sm -bottom-5 right-0 transition-all
+            hover:text-blue-600 dark:hover:text-red-600"
+            >
+              {showMore ? "Show Less" : "Read more"}
+            </button>
+          </div>
+          <div className="mt-3 flex gap-10">
             <a
               target="_blank"
               className="bg-blue-600 text-white dark:bg-red-600 py-1 px-4 rounded-md"
@@ -48,8 +61,8 @@ const ActorDetail = () => {
             >
               IMDB
             </a>
-            <button onClick={() => handleBack(`/Movie/${id}`)}>
-              <AiOutlineArrowLeft />
+            <button onClick={() => handleBack(-1)}>
+              <AiOutlineArrowLeft size={30} />
             </button>
           </div>
         </div>

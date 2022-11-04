@@ -7,7 +7,7 @@ module.exports = {
       // that is animation class
       animation: {
         fade: "fadeOut 0.3s ease-in-out",
-        slide: "slideRight 0.3s ease-out"
+        slide: "slideRight 0.3s ease-out",
       },
 
       // that is actual animation
@@ -23,5 +23,5 @@ module.exports = {
       }),
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

@@ -23,6 +23,7 @@ const Sidebar = ({ toggleSideBar, setToggleSideBar }) => {
   //getting genre on movieDetail page
   const changeGenreOrCategory = (genreOrCategory) => {
     dispatch(selectGenreOrCategory(genreOrCategory));
+    setToggleSideBar(false);
     nav("/");
   };
   return (

@@ -13,7 +13,7 @@ export const fetchToken = async () => {
     const token = data.request_token;
     if (data.success) {
       localStorage.setItem("request_token", token);
-      window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=${window.location.origin}/approved`;
+      window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=${window.location.origin}/profile`;
     }
   } catch (error) {
     console.log("Sorry, no");
@@ -27,7 +27,7 @@ export const createSessionId = async () => {
     try {
       const {
         data: { session_id },
-      } = moviesApi.post("authentication/session/new", {
+      } = await moviesApi.post("authentication/session/new", {
         request_token: token,
       });
       localStorage.setItem("session_id", session_id);

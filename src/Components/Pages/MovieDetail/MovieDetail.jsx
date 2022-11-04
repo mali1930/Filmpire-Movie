@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-//import axios from "axios";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { userSelector } from "../../../app/features/auth";
 import ReactStars from "react-rating-stars-component";
 import { GrLanguage } from "react-icons/gr";
 import { BiMovie } from "react-icons/bi";
@@ -7,10 +8,10 @@ import { BsFillSuitHeartFill } from "react-icons/bs";
 import { FaTheaterMasks } from "react-icons/fa";
 import { MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { useGetMovieQuery } from "../../../Services/TMDB";
+import { useGetMovieQuery, useGetListQuery } from "../../../Services/TMDB";
 import { Link, useParams } from "react-router-dom";
 import { selectGenreOrCategory } from "../../../app/features/currentGenreOrCategory";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import genreIcons from "../../assets/genres";
 import Loader from "../../Loader";
@@ -19,29 +20,48 @@ import Recommendtion from "../../Recommendtion";
 import Modal from "../../Modal";
 
 const MovieDetail = () => {
-  // const { user } = useSelector();
   const home = useNavigate();
   const navigate = useNavigate();
   const { id } = useParams();
   const [modal, toggleModal] = useState(false);
+  const [isMovieFavorited, setIsMovieFavorited] = useState(false);
 
-  const { data: movie, isFetching, isError } = useGetMovieQuery(id);
+  const { user } = useSelector(userSelector);
 
   const dispatch = useDispatch();
+  const { data: movie, isFetching, isError } = useGetMovieQuery(id);
+
+  const { data: favoriteMovies } = useGetListQuery({
+    listName: "favorite/movies",
+    accountId: user.id,
+    sessionId: localStorage.getItem("session_id"),
+    page: 1,
+  });
+
+  useEffect(() => {
+    setIsMovieFavorited(
+      !!favoriteMovies?.results?.find((movie_) => movie_?.id === movie?.id)
+    );
+  }, [favoriteMovies]);
+
   if (isFetching) {
     return <Loader />;
   }
   if (isError) return <h1>404 Not Found</h1>;
-  const isMovieFavorite = false;
-  const isMovieWatchList = false;
+
   const addToFavorite = async () => {
-    // await axios.post(
-    //   `https://api.themoviedb.org/3/account/${user.id}/favorite?api_key=${
-    //     process.env.REACT_APP_TMDB_KEY
-    //   }&session_id=${localStorage.getItem("session_id")}`
-    // );
+    await axios.post(
+      `https://api.themoviedb.org/3/account/${user.id}/favorite?api_key=${
+        process.env.REACT_APP_TMDB_KEY
+      }&session_id=${localStorage.getItem("session_id")}`,
+      {
+        media_type: "movie",
+        media_id: id,
+        favorite: !isMovieFavorited,
+      }
+    );
+    setIsMovieFavorited((prev) => !prev);
   };
-  const addToWatchList = async () => {};
 
   return (
     <>
@@ -173,7 +193,7 @@ const MovieDetail = () => {
                 onClick={addToFavorite}
                 className="flex items-center gap-2 border-2  px-2 mb-3 "
               >
-                {isMovieFavorite ? (
+                {isMovieFavorited ? (
                   <h1 className="flex items-center gap-1">
                     <BsFillSuitHeartFill />
                     UnFavorite
@@ -185,28 +205,12 @@ const MovieDetail = () => {
                   </h1>
                 )}
               </button>
-              <button
-                onClick={addToWatchList}
-                className="flex items-center gap-2 border-2  px-2 mb-3 "
-              >
-                {isMovieWatchList ? (
-                  <h1 className="flex items-center gap-1">
-                    <BsFillSuitHeartFill />
-                    WatchList -
-                  </h1>
-                ) : (
-                  <h1 className="flex items-center gap-1">
-                    <MdFavoriteBorder />
-                    watchList +
-                  </h1>
-                )}
-              </button>
             </div>
           </div>
           <Modal
             toggle={toggleModal}
-            //videoKey={movie.videos.results?.[0].key}
-            isOpen={modal}
+            videoKey={movie.videos.results?.[0]?.key}
+            isOpen={modal && movie.videos.results?.[0]?.key}
           />
         </div>
       </div>

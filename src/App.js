@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
@@ -8,9 +8,17 @@ import Home from "./Components/Pages/Home/Home";
 import ActorDetail from "./Components/Pages/ActorDetail/ActorDetail";
 import MovieDetail from "./Components/Pages/MovieDetail/MovieDetail";
 import Profile from "./Components/Pages/Profile/Profile";
+import { saveStateToStorage } from "./app/features/currentGenreOrCategory";
 const App = () => {
   const [toggleSideBar, setToggleSideBar] = useState(false);
-  const { theme } = useSelector((s) => s.theme);
+  const {
+    theme: { theme },
+    currentGenreOrCategory,
+  } = useSelector((s) => s);
+
+  useEffect(() => {
+    saveStateToStorage(currentGenreOrCategory);
+  }, [currentGenreOrCategory]);
   return (
     <>
       <div className={"flex relative w-full " + theme}>
@@ -21,7 +29,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/movie/:id" element=<MovieDetail /> />
             <Route path="/actor/:id" element=<ActorDetail /> />
-            <Route path="/profile/id" element=<Profile /> />
+            <Route path="/profile" element=<Profile /> />
           </Routes>
         </div>
       </div>
