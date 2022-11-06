@@ -156,7 +156,7 @@ const MovieDetail = () => {
                 ))}
             </div>
             {/* //Buttons trailer,watchList */}
-            <div className="mt-5 mb-5 flex flex-wrap items-center justify-center gap-1  ">
+            <div className="mt-5 mb-5 flex flex-wrap items-center justify-start gap-1  ">
               <a
                 target="_blank"
                 rel="noopener noreferrer"

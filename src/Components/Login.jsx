@@ -15,7 +15,6 @@ const Movies = () => {
     const loginUser = async () => {
       if (token) {
         if (sessionIdFromLocalStorage) {
-          console.log(1);
           const { data: userData } = await moviesApi.get(
             `/account?session_id=${sessionIdFromLocalStorage}`
           );
@@ -43,10 +42,9 @@ const Movies = () => {
           </span>
         </button>
       ) : (
-        <Link to="/profile/id">
+        <Link to="/profile">
           <button
-            to={`/profile/${user.id}`}
-            onClick={fetchToken}
+  
             className="flex items-center gap-3"
           >
             My Movies
