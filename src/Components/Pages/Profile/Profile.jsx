@@ -5,12 +5,17 @@ import MoviesCard from "../../MoviesCard";
 const Profile = () => {
   const { user } = useSelector((s) => s.user);
 
-  const { data: favoriteMovies } = useGetListQuery({
-    listName: "favorite/movies",
-    accountId: user.id,
-    sessionId: localStorage.getItem("session_id"),
-    page: 1,
-  });
+  const { data: favoriteMovies } = useGetListQuery(
+    {
+      listName: "favorite/movies",
+      accountId: user.id,
+      sessionId: localStorage.getItem("session_id"),
+      page: 1,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const logout = () => {
     localStorage.clear();
     window.location.href = "/";

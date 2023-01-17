@@ -36,13 +36,15 @@ const MovieDetail = () => {
     accountId: user.id,
     sessionId: localStorage.getItem("session_id"),
     page: 1,
+  }, {
+    refetchOnMountOrArgChange: true
   });
 
   useEffect(() => {
     setIsMovieFavorited(
       !!favoriteMovies?.results?.find((movie_) => movie_?.id === movie?.id)
     );
-  }, [favoriteMovies]);
+  }, [favoriteMovies, movie]);
 
   if (isFetching) {
     return <Loader />;
